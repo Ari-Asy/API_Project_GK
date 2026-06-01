@@ -1,0 +1,27 @@
+const express = require('express');
+const path = require('node:path');
+const MyApp = express();
+const port = 3000;
+
+MyApp.set('view engine', 'pug');
+MyApp.set('views', path.join(__dirname, 'views'));
+
+MyApp.get('/', (req, res) => {
+    res.render('index', {
+        title: 'API Project GK',
+        message: 'Welcome to my API Project!'
+    });
+});
+
+MyApp.post('/submit-form',(req, res) => {
+    res.send('Form submitted!');
+});
+
+MyApp.use((req, res, next) => {
+    console.log(`${req.method} request made to ${req.url}`);
+    next();
+});
+
+MyApp.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}/`);
+});
