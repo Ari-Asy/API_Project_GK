@@ -1,13 +1,17 @@
 const express = require('express');
 const path = require('node:path');
 const MyApp = express();
-const port = 3000;
+const port = 5000;
 
+// Setting Database
+
+
+// Setting views Template
 MyApp.set('view engine', 'pug');
 MyApp.set('views', path.join(__dirname, 'views'));
 
 MyApp.get('/', (req, res) => {
-    res.render('index', {
+    res.render('template', {
         title: 'API Project GK',
         message: 'Welcome to my API Project!'
     });

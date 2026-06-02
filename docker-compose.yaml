@@ -1,0 +1,14 @@
+name: appAPI
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=development
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
