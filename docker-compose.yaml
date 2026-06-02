@@ -2,12 +2,13 @@ name: appapi-web
 services:
   web:
     build: .
+    image: node:lts-alpine3.23
     ports:
       - "5000:5000"
     volumes:
       - .:/app
   dbpostgres:
-    image: postgres:latest
+    image: postgres:14.23-trixie
     container_name: postgres
     ports:
       - "5432:5432"

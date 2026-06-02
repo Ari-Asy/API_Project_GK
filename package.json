@@ -6,7 +6,9 @@
   "version": "1.0.0",
   "description": "Node.js on Docker",
   "main": "myApp.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "sequelize-cli": "^6.6.5"
+  },
   "scripts": {
     "start": "node myApp.js",
     "test": "echo \"Error: no test specified\" && exit 1"
