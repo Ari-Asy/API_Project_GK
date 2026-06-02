@@ -1,4 +1,4 @@
-name: appAPI
+name: appapi-web
 services:
   web:
     build: .
@@ -6,9 +6,30 @@ services:
       - "5000:5000"
     volumes:
       - .:/app
-    environment:
-      - NODE_ENV=development
-  db:
+  dbpostgres:
     image: postgres:latest
+    container_name: postgres
     ports:
       - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-mydatabase}
+      POSTGRES_USER: ${POSTGRES_USER:-myuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mypassword}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    ports:
+      - "5050:80"
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    depends_on:
+      - dbpostgres
+volumes:
+  postgres_data:

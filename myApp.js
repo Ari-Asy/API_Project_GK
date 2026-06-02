@@ -10,6 +10,7 @@ const port = 5000;
 MyApp.set('view engine', 'pug');
 MyApp.set('views', path.join(__dirname, 'views'));
 
+// App
 MyApp.get('/', (req, res) => {
     res.render('template', {
         title: 'API Project GK',
