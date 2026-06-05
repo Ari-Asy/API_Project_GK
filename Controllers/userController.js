@@ -5,9 +5,9 @@ const User = db.User;
 
 const register = async(req, res) => {
     try {
-        const { userName, email, password } = req.body;
+        const { username, email, password } = req.body;
         const data = {
-            userName,
+            username,
             email,
             password: await bcrypt.hash(password, 10),
         };
@@ -16,15 +16,20 @@ const register = async(req, res) => {
         //
         if (user){
             let token = jwt.sign({ id: user.id }, process.env.secretKey,{
-                expiresIn: 1 * 24 * 60 * 60 * 1000
+                expiresIn: 86400
             });
 
-            res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly:true });
+            res.cookie("jwt", token, { maxAge: 86400000, httpOnly:true });
             console.log("user", JSON.stringify(user, null, 2));
             console.log(token);
-            return res.status(201).send(user);
+
+            // ไม่ส่งค่าการแสดง Password
+            const userData = user.toJSON();
+            delete userData.password;
+
+            return res.status(201).json(userData);
         } else {
-            return res.status(409).send("ไม่ถูกต้อง");
+            return res.status(409).json("ไม่ถูกต้อง");
         }
     } catch (error) {
         console.log(error);
@@ -46,18 +51,23 @@ const login = async (req, res) => {
 
             if(isSame){
                 let token = jwt.sign({ id: user.id }, process.env.secretKey, {
-                    expiresIn: 1 * 24 * 60 * 60 * 1000,
+                    expiresIn: 86400
                 });
 
-                res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true});
+                res.cookie("jwt", token, { maxAge: 86400000, httpOnly: true});
                 console.log("user", JSON.stringify(user, null, 2));
                 console.log(token);
-                return res.status(201).send(user);
+
+                //ไม่ส่งค่า Password กลับ
+                const userData = user.toJSON();
+                delete userData.password;
+
+                return res.status(200).json(userData);
             } else {
-                return res.status(401).send("Authentication ล้มเหลว");
+                return res.status(401).json("Authentication ล้มเหลว");
             } 
         } else {
-            return res.status(401).send("Authentication ล้มเหลว");
+            return res.status(401).json("Authentication ล้มเหลว");
         }
     } catch(error) {
         console.log(error);

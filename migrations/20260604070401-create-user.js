@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userName: {
+      username: {
         type: Sequelize.STRING,
         allowNull: false, // กำหนดว่าต้องไม่เป็น null
         unique: true // กำหนดว่าให้ไม่ซ้ำกัน

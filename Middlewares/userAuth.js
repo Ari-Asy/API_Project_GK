@@ -6,11 +6,11 @@ const saveUser = async(req, res, next) => {
     try {
         const username = await User.findOne({
             where: {
-                userName: req.body.userName,
+                username: req.body.username,
             },
         });
         if(username){
-            return res.json(409).send("username ซ้ำกัน");
+            return res.json(409).json("username ซ้ำกัน");
         }
 
         const emailcheck = await User.findOne({
@@ -19,7 +19,7 @@ const saveUser = async(req, res, next) => {
             },
         });
         if(emailcheck){
-            return res.json(409).send("ตรวจสอบล้มเหลว")
+            return res.json(409).json("ตรวจสอบล้มเหลว")
         }
 
         next();
