@@ -1,6 +1,6 @@
 const express = require("express");
 const db = require("../models");
-const User = db.users;
+const User = db.User;
 
 const saveUser = async(req, res, next) => {
     try {
