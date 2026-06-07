@@ -7,6 +7,8 @@ services:
       - "5000:5000"
     volumes:
       - .:/app
+      - /app/node_modules
+    command: npm run start:dev
   dbpostgres:
     image: postgres:14.23-trixie
     container_name: postgres
