@@ -1,7 +1,9 @@
 name: appapi-web
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: dockerfile
     image: node:lts-alpine3.23
     ports:
       - "5000:5000"

@@ -24,10 +24,15 @@ MyApp.use(express.json());// คือการใช้ middleware ของ Ex
 MyApp.use(express.urlencoded({ extended:false }));
 MyApp.use(cookieParser());
 
-//จะล้างและสร้าง Database ใหม่ทุกครั้งที่ start server
-db.sequelize.sync({ force: true }).then(() => {
-    console.log("db has been re sync");
-}); 
+// ล้างข้อมูลทุกครั้งที่รัน Server
+// db.sequelize.sync({ force: true }).then(() => {
+//     console.log("db has been re sync");
+// }); 
+
+MyApp.use((req, res, next) => {
+    console.log(`${req.method} request made to ${req.url}`);
+    next();
+});
 
 // App
 MyApp.get('/', (req, res) => {
@@ -45,11 +50,6 @@ MyApp.post('/login', login);
 MyApp.use('/api/product', productRoute);
 
 //listening to server connection
-MyApp.use((req, res, next) => {
-    console.log(`${req.method} request made to ${req.url}`);
-    next();
-});
-
 MyApp.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
 });

@@ -38,9 +38,9 @@ const getProductByID = async(req, res) => {
 
 // แก้ไข Product
 const updateProduct = async(req, res) => {
-    await Product.update(req, body,{
+    await Product.update(req.body, {
         where: {
-            id:req.params.id
+            id: req.params.id
         }
     });
     res.status(200).json("Product updated");
@@ -49,13 +49,13 @@ const updateProduct = async(req, res) => {
 // ลบ Product
 const deleteProduct = async(req, res) => {
     const product = await Product.findByPk(req.params.id);
-    if(!product){
+    if(!product) {
         return res.status(404).json({
             message: "Product not found"
         });
     }
     
-    await Product.destroy();
+    await product.destroy();
     res.status(200).json({
         message: "Product deleted"
     });
