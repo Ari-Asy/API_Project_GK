@@ -3,7 +3,8 @@ const db = require('../models');
 const jwt = require('jsonwebtoken');
 const User = db.User;
 
-const register = async(req, res) => {
+// register function
+const register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
         const data = {
@@ -13,13 +14,15 @@ const register = async(req, res) => {
         };
         const user = await User.create(data);
 
-        //
-        if (user){
-            let token = jwt.sign({ id: user.id }, process.env.secretKey,{
+        if (user) { 
+            // Token คือการยืนยันสิทธิ์ตัวตนเองตัวเองใน server
+            // JWT คือเหมือนลายเซ็นดิจิทัลของ server ป้องกันการถูกแอบแก้ไขข้อมูล
+            let token = jwt.sign({ id: user.id }, process.env.secretKey, {
                 expiresIn: 86400
             });
 
-            res.cookie("jwt", token, { maxAge: 86400000, httpOnly:true });
+            // Cookie ้ใช้จดจำข้อมูลผู้ใช้
+            res.cookie("jwt", token, { maxAge: 86400000, httpOnly: true });
             console.log("user", JSON.stringify(user, null, 2));
             console.log(token);
 
@@ -27,16 +30,16 @@ const register = async(req, res) => {
             const userData = user.toJSON();
             delete userData.password;
 
-            return res.status(201).json(userData);
+            return res.status(201).json(userData);// 201 Created: สร้างข้อมูลสำเร็จ
         } else {
-            return res.status(409).json("ไม่ถูกต้อง");
+            return res.status(409).json("ไม่ถูกต้อง");// 409 Conflict: ข้อมูลชนกัน/ซ้ำกัน
         }
     } catch (error) {
         console.log(error);
     }
 };
 
-//
+// login function
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -46,15 +49,18 @@ const login = async (req, res) => {
             }
         });
 
-        if(user){
+        if (user) {
             const isSame = await bcrypt.compare(password, user.password);
 
-            if(isSame){
+            if (isSame) {
+                // Token คือการยืนยันสิทธิ์ตัวตนเองตัวเองใน server
+                // JWT คือเหมือนลายเซ็นดิจิทัลของ server ป้องกันการถูกแอบแก้ไขข้อมูล
                 let token = jwt.sign({ id: user.id }, process.env.secretKey, {
                     expiresIn: 86400
                 });
 
-                res.cookie("jwt", token, { maxAge: 86400000, httpOnly: true});
+                // Cookie ้ใช้จดจำข้อมูลผู้ใช้
+                res.cookie("jwt", token, { maxAge: 86400000, httpOnly: true });
                 console.log("user", JSON.stringify(user, null, 2));
                 console.log(token);
 
@@ -62,14 +68,14 @@ const login = async (req, res) => {
                 const userData = user.toJSON();
                 delete userData.password;
 
-                return res.status(200).json(userData);
+                return res.status(200).json(userData);// 200 OK:สำเร็จทั่วไป
             } else {
-                return res.status(401).json("Authentication ล้มเหลว");
-            } 
+                return res.status(401).json("Authentication ล้มเหลว");// 401 Unauthorized: ยืนยันตัวตนไม่ผ่าน
+            }
         } else {
             return res.status(401).json("Authentication ล้มเหลว");
         }
-    } catch(error) {
+    } catch (error) {
         console.log(error);
     }
 };

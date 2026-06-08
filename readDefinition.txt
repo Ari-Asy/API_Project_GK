@@ -1,0 +1,75 @@
+Controllers
+// Token คือการยืนยันสิทธิ์ตัวตนเองตัวเองใน server
+// JWT คือเหมือนลายเซ็นดิจิทัลของ server ป้องกันการถูกแอบแก้ไขข้อมูล
+// Cookie ใช้จดจำข้อมูลผู้ใช้
+process.env.secretKey คือกุญแจลับ เอาไว้เซ็น JWT
+maxAge ของ cookie ใช้หน่อยเป็น มิลลิวินาที
+
+Script
+// req = request ข้อมูลที่ client ส่งเข้ามา
+// res = response สิ่งที่ server ส่งกลับไปหา client
+// await = คือรอให้คำสั่ง async ทำงานเสร็จก่อนค่อยไปขั้นตอนต่อไป
+// async = บอกว่า function นี้มีการทำงาน asynchronous
+// const = ประกาศตัวแปร
+CRUD
+- Create = create
+- Read = findAll / findByPk
+- Update = update
+- Delete = destroy
+// Product.create = สร้าง Product ใหม่ลง Database
+// Product.findAll = เรียกดู Product ทั้งหมด 
+// Product.findByPk = หา Product ตาม primary key
+// Product.update = แก้ไข Product ที่กำหนดตาม id ที่ตรงกับ params
+// Product.destroy = ลบ Product ออกจาก Database ตาม ID ที่กำหนด
+
+res.status(...) คือตัวบอกสถานะ HTTP ที่ server ส่งกลับไปหา client
+// 201 Created = สร้างข้อมูลสำเร็จ
+// 200 OK = สำเร็จทั่วไป
+// 409 Conflict = ข้อมูลชนกัน ข้อมูลซ้ำกัน
+// 401 Unauthorized = ยืนยันตัวตนไม่ผ่าน
+// 404 = หาไม่เจอ
+// 500 = server error
+โดยจะสามารถ เลือกตัวเลขได้ครั้งเดียวต่อ response
+
+Database
+// Migration คือไฟล์ที่กำหนดให้ database ต้องสร้างหรือแก้ไขตัว table ยังไงตามที่กำหนด 
+
+.env
+// ไฟล์ความลับ
+
+docker-compose.yaml
+// volumes: - .:/app & - /app/node_modules คือการกำหนด folder project ปัจจุบันเข้าไปอยู่ใน container
+// volumes: postgres_data: คือเก็บข้อมูล db ถาวรแม้ว่าตัว container จะถูกปิดหรือเปิดใหม่ข้อมูลก็ยังอยู่
+// depends_on: A คือกำหนดให้ B เริ่มก่อนที่จะมา A เป็นการบอกลำดับการ start container
+
+Folder
+// config = เก็บไฟล์การตั้งค่า เช่น config สำหรับเชื่อม database เป็นของ Sequelize
+// Controllers = ระบบการทำงานหลักของแต่ละ API เมื่อมีการ request เข้ามาต้องทำอะไรบ้าง
+// Middlewares = ตัวกลางการทำงานก่อนถึง controller หรือใช้จัดพวก route
+// migrations = เก็บการสร้างและแก้ไขโครงสร้าง database แทนการเข้าไปแก้ไขในตัว SQL
+// model = เก็บ Model ของ Sequelize คือตัวแทนของ table ใน database
+// views = ไฟล์หน้าเว็บหรือคือ template ที่ server render ออกมา
+
+Bash
+// docker compose up -d
+// docker compose logs web ถ้าแบบ Realtime -> docker compose logs web -f web
+// nodemon myApp.js = ตัวช่วยเวลา Development เวลาแก้ไขไฟล์แล้ว save มันจะ restart server แล้วรันให้อัตโนมัติ
+// nodemon --legacy-watch myApp.js 
+    คือ nodemon = รัน server และ restart อัตโนมัติเมื่อแก้ไฟล์
+    --legacy-watch = โหมดช่วยดูไฟล์เปลี่ยนแปลง เหมาะกับ Docker/Windows บางกรณี
+    myApp.js = ไฟล์หลักที่จะรัน
+
+HTTP method
+- คือประเภทของ request ที่ client ส่งมาให้ server
+// GET = ขอดูข้อมูล
+// POST = สร้างข้อมูลใหม่ หรือส่งข้อมูลไปให้ server ประมวลผล
+// PUT = แก้ไขข้อมูลทั้งหมด อย่างการแก้ไขข้อมูลของ ID1 ทั้ง field
+// PATCH = แก้ไขข้อมูลบางส่วน ไม่ได้แก้ทุก field
+// DELETE = ลบข้อมูลทิ้ง
+// HEAD = เหมือน GET แต่ server ส่งกลับมาเฉพาะ header ไม่ส่ง body ใช้เช็คว่ามีข้อมูลไหม URL ใช้ได้ไหม
+// OPTIONS = ใช้ดู server ว่า endpoint นี้รองรับ method อะไรบ้าง
+ถ้าเทียบกกับ CRUD
+- Create -> POST
+- Read -> GET
+- Update -> PUT/PATCH
+- Delete -> DELETE
