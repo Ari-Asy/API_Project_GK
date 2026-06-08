@@ -73,3 +73,10 @@ HTTP method
 - Read -> GET
 - Update -> PUT/PATCH
 - Delete -> DELETE
+
+ตอนแสดงผลถ้าให้ดีต้องเป็นแบบนี้
+GET         /products
+GET         /products/{id}
+POST        /products
+PUT/PATCH   /products/{id}
+DELETE      /products/{id}

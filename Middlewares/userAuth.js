@@ -10,7 +10,9 @@ const saveUser = async(req, res, next) => {
             },
         });
         if(username){
-            return res.status(409).json("username ซ้ำกัน");
+            return res.status(409).json({
+                message: "username ซ้ำกัน"
+            });
         }
 
         const emailcheck = await User.findOne({
@@ -19,7 +21,9 @@ const saveUser = async(req, res, next) => {
             },
         });
         if(emailcheck){
-            return res.status(409).json("ตรวจสอบล้มเหลว")
+            return res.status(409).json({
+                message: "ตรวจสอบล้มเหลว"
+            });
         }
 
         next();

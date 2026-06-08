@@ -29,7 +29,9 @@ const allProducts = async (req, res) => {
 const getProductByID = async (req, res) => {
     const product = await Product.findByPk(req.params.id);
     if (!product) {
-        return res.status(404).json("Product not found");
+        return res.status(404).json({
+            message: "Product not found"
+        });
     } else {
         res.status(200).json(product);
     }
@@ -37,18 +39,42 @@ const getProductByID = async (req, res) => {
 
 // แก้ไข Product
 const updateProduct = async (req, res) => {
-    await Product.update(req.body, {
-        where: {
-            id: req.params.id
+    try {
+        const product = await Product.findByPk(req.params.id);
+        if(!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        } if(req.body.id) {
+            return res.status(400).json({
+                message: "Cannot update product id"
+            });
         }
-    });
-    res.status(200).json("Product updated");
+
+        // เลือกเฉพาะที่จำเป็น
+        const { name, description, price, stock, category } = req.body;
+        await product.update({
+            name,
+            description,
+            price,
+            stock,
+            category
+        });
+        return res.status(200).json({
+            message: "Product update",
+            product
+        });
+    } catch(error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
 };
 
 // ลบ Product
 const deleteProduct = async (req, res) => {
     const product = await Product.findByPk(req.params.id);
-    if (!product) {
+    if(!product) {
         return res.status(404).json({
             message: "Product not found"
         });
