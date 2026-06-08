@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const productController = require('../Controllers/productController');
+const productCheck = require('./productCheck');
 
 // Create
-router.post('/', productController.createProduct);
+router.post('/', productCheck.existingProduct, productController.createProduct);
 
 // Get AllProduct
 router.get('/', productController.allProducts);
@@ -11,8 +12,8 @@ router.get('/', productController.allProducts);
 router.get('/:id', productController.getProductByID);
 
 // Up Date Product
-router.put('/:id', productController.updateProduct);
-router.patch('/:id', productController.updateProduct);
+router.put('/:id', productCheck.checkIdProduct, productController.updateProduct);
+router.patch('/:id', productCheck.checkIdProduct, productController.updateProduct);
 
 // Delete Product
 router.delete('/:id', productController.deleteProduct);

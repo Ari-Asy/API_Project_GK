@@ -4,6 +4,7 @@ const User = db.User;
 
 const saveUser = async(req, res, next) => {
     try {
+        // เช็ค username ซ้ำ
         const username = await User.findOne({
             where: {
                 username: req.body.username,
@@ -15,6 +16,7 @@ const saveUser = async(req, res, next) => {
             });
         }
 
+        // เช็ค email ซ้ำ
         const emailcheck = await User.findOne({
             where: {
                 email: req.body.email,
@@ -27,8 +29,10 @@ const saveUser = async(req, res, next) => {
         }
 
         next();
-    } catch(error){
-        console.log(error);
+    } catch(error) {
+        return res.status(500).json({
+            message: error.message
+        });
     }
 };
 
