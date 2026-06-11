@@ -1,9 +1,21 @@
 Controllers
 // Token คือการยืนยันสิทธิ์ตัวตนเองตัวเองใน server
 // JWT คือเหมือนลายเซ็นดิจิทัลของ server ป้องกันการถูกแอบแก้ไขข้อมูล
-// Cookie ใช้จดจำข้อมูลผู้ใช้
 process.env.secretKey คือกุญแจลับ เอาไว้เซ็น JWT
 maxAge ของ cookie ใช้หน่อยเป็น มิลลิวินาที
+1. User login สำเร็จ
+2. Server สร้าง token ที่มี id ของ user
+3. Server ส่ง token กลับไปให้ client
+4. Client เก็บ token ไว้
+5. Client แนบ token มากับ request ถัดไป
+
+โครงสร้างของ JWT
+หน้าตาของ JWT จะเป็นสตริงข้อความยาวๆ ที่ถูกคั่นด้วยจุด (.) แบ่งออกเป็น 3 ส่วนหลักๆ คือ
+1:Header: ระบุข้อมูลประเภทของ Token และอัลกอริทึมที่ใช้ในการเข้ารหัสลายเซ็น (เช่น HMAC SHA256)
+2:Payload: ส่วนที่เก็บข้อมูลสำคัญ (Claim) เช่น ข้อมูลระบุตัวตนของผู้ใช้ (User ID), สิทธิ์การเข้าใช้งาน (Role), และวันหมดอายุ
+3:Signature: ส่วนที่นำ Header และ Payload มาเข้ารหัสรวมกับรหัสลับฝั่งเซิร์ฟเวอร์ (Secret Key) เพื่อใช้ตรวจสอบว่าข้อมูลถูกแก้ไขหรือปลอมแปลงหรือไม่
+
+
 
 Script
 // req = request ข้อมูลที่ client ส่งเข้ามา
@@ -22,25 +34,33 @@ CRUD
 // Product.update = แก้ไข Product ที่กำหนดตาม id ที่ตรงกับ params
 // Product.destroy = ลบ Product ออกจาก Database ตาม ID ที่กำหนด
 
+
+
 res.status(...) คือตัวบอกสถานะ HTTP ที่ server ส่งกลับไปหา client
 // 201 Created = สร้างข้อมูลสำเร็จ
 // 200 OK = สำเร็จทั่วไป
+// 300 ทั้งหมด
+// 400 ทั้งหมด 
 // 409 Conflict = ข้อมูลชนกัน ข้อมูลซ้ำกัน
 // 401 Unauthorized = ยืนยันตัวตนไม่ผ่าน
 // 404 = หาไม่เจอ
 // 500 = server error
 โดยจะสามารถ เลือกตัวเลขได้ครั้งเดียวต่อ response
 
+
 Database
 // Migration คือไฟล์ที่กำหนดให้ database ต้องสร้างหรือแก้ไขตัว table ยังไงตามที่กำหนด 
 
+
 .env
 // ไฟล์ความลับ
+
 
 docker-compose.yaml
 // volumes: - .:/app & - /app/node_modules คือการกำหนด folder project ปัจจุบันเข้าไปอยู่ใน container
 // volumes: postgres_data: คือเก็บข้อมูล db ถาวรแม้ว่าตัว container จะถูกปิดหรือเปิดใหม่ข้อมูลก็ยังอยู่
 // depends_on: A คือกำหนดให้ B เริ่มก่อนที่จะมา A เป็นการบอกลำดับการ start container
+
 
 Folder
 // config = เก็บไฟล์การตั้งค่า เช่น config สำหรับเชื่อม database เป็นของ Sequelize
@@ -50,6 +70,7 @@ Folder
 // model = เก็บ Model ของ Sequelize คือตัวแทนของ table ใน database
 // views = ไฟล์หน้าเว็บหรือคือ template ที่ server render ออกมา
 
+
 Bash
 // docker compose up -d
 // docker compose logs web ถ้าแบบ Realtime -> docker compose logs web -f web
@@ -58,6 +79,7 @@ Bash
     คือ nodemon = รัน server และ restart อัตโนมัติเมื่อแก้ไฟล์
     --legacy-watch = โหมดช่วยดูไฟล์เปลี่ยนแปลง เหมาะกับ Docker/Windows บางกรณี
     myApp.js = ไฟล์หลักที่จะรัน
+
 
 HTTP method
 - คือประเภทของ request ที่ client ส่งมาให้ server
@@ -74,9 +96,15 @@ HTTP method
 - Update -> PUT/PATCH
 - Delete -> DELETE
 
+
 ตอนแสดงผลถ้าให้ดีต้องเป็นแบบนี้
 GET         /products
 GET         /products/{id}
 POST        /products
 PUT/PATCH   /products/{id}
 DELETE      /products/{id}
+
+
+ด้านความปลอดภัย
+//id products
+//password user
