@@ -6,11 +6,12 @@ const User = db.User;
 // register function
 const register = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, role } = req.body;
         const data = {
             username,
             email,
             password: await bcrypt.hash(password, 10),
+            role: 'user',
         };
         const user = await User.create(data);
 
@@ -43,12 +44,12 @@ const login = async (req, res) => {
 
         if (user) {
             const isSame = await bcrypt.compare(password, user.password);
-            const payload = { id: user.id, username: user.username };
+            const payload = { id: user.id, username: user.username, role: user.role };
 
             if (isSame) {
                 // Token คือการยืนยันสิทธิ์ตัวตนเองตัวเองใน server
                 // JWT คือเหมือนลายเซ็นดิจิทัลของ server ป้องกันการถูกแอบแก้ไขข้อมูล
-                // X = header ,Y = payload ,Z = sign
+                // X = header ,Y = payload ,Z = SECRETKEY
                 let token = jwt.sign(payload, process.env.SECRETKEY, {
                     expiresIn: 86400 // ระยะเวลา 1 วัน
                 });
@@ -58,7 +59,6 @@ const login = async (req, res) => {
                 delete userData.password;
 
                 return res.status(200).json({
-                    message: "Login successful",
                     token: token,   // แสดง Token
                     user: userData
                 });// 200 OK:สำเร็จทั่วไป
@@ -77,7 +77,23 @@ const login = async (req, res) => {
     }
 };
 
+// ลบ user ทิ้ง
+const deleteUser = async (req, res) => {
+    const user = await user.findByPk(req.params.id);
+    if(!user) {
+        return res.status(404).json({
+            message: "user not found"
+        });
+    }
+
+    await user.destroy();
+    res.status(200).json({
+        message: "User deleted"
+    });
+};
+
 module.exports = {
     register,
     login,
+    deleteUser,
 };

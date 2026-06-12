@@ -5,15 +5,10 @@ const dotenv = require('dotenv').config();
 const db = require('./models');
 
 // เชื่อม route user กับ controller user
-const userController = require('./Controllers/userController');
-const { register, login } = userController;
-const userAuth = require('./Middlewares/userAuth');
+const userRoute = require('./router/userRoute');
 
 // เชื่อม route product กับ controller product
-const productRoute = require('./Middlewares/productRoute');
-
-// เชื่อม middleware ของ authMiddleware
-const verifyToken = require('./Middlewares/verifyToken');
+const productRoute = require('./router/productRoute');
 
 const MyApp = express();
 const port = 5000;
@@ -43,12 +38,11 @@ MyApp.get('/', (req, res) => {
 
 // สร้าง API Register & Login
 // คือการเชื่อม route ที่ชื่อว่า register กับ controller ที่ชื่อว่า register และส่งผ่าน middleware ที่ชื่อว่า saveUser
-MyApp.post('/register', userAuth.saveUser, register);
-MyApp.post('/login', login);
+MyApp.use('/api/user', userRoute);
 
 // เชื่อม RouteProduct
 // verifyToken มันจะทำงานก่อนเพื่อตรวจสอบ Token ก่อนไปเช็ค Product
-MyApp.use('/api/product', verifyToken, productRoute);
+MyApp.use('/api/product', productRoute);
 
 // Start server
 MyApp.listen(port, () => {
