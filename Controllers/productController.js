@@ -50,7 +50,6 @@ const updateProduct = async (req, res) => {
         category
     });
     res.status(200).json({
-        message: "Product updated",
         product
     });
 };

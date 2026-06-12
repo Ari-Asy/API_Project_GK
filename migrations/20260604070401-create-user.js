@@ -29,6 +29,10 @@ module.exports = {
           len: [6,100] // กำหนดความยาวของรหัสผ่านให้มีอย่างน้อย 6 ตัวอักษร
         }
       },
+      role: {
+        type: Sequelize.STRING,
+        defaultValue: 'user'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

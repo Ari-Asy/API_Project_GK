@@ -2,9 +2,7 @@
 const jwt = require('jsonwebtoken');
 
 // สร้างตัวแปร Middleware ตรวจจับ Token
-const verifyToken = (req, res, next) => {
-    
-    // 2 อันนี้ดูข้อมูลเพิ่ม ว่าใช้งานยังไง
+const verifyToken = (req, res, next) => {    
     const authHeader = req.headers.authorization; // อ่านค่า header ที่ชื่อ authorization
     const token = authHeader?.split(" ")?.[1]; // แยกด้วยช่องว่าง และเอาข้อความแค่ตัว token ที่เป็น array ที่สอง
     
