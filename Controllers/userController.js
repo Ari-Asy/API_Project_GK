@@ -24,7 +24,7 @@ const register = async (req, res) => {
             return res.status(201).json(userData);// 201 Created: สร้างข้อมูลสำเร็จ
         } else {
             return res.status(409).json({
-                message: "ไม่ถูกต้อง"
+                message: "Incorrect"
             });// 409 Conflict: ข้อมูลชนกัน/ซ้ำกัน
         }
     } catch (error) {
@@ -64,12 +64,12 @@ const login = async (req, res) => {
                 });// 200 OK:สำเร็จทั่วไป
             } else {
                 return res.status(401).json({
-                    message: "Authentication ล้มเหลว"
+                    message: "Authentication fail"
                 });// 401 Unauthorized: ยืนยันตัวตนไม่ผ่าน
             }
         } else {
             return res.status(401).json({
-                message: "Authentication ล้มเหลว"
+                message: "Authentication fail"
             });
         }
     } catch (error) {
@@ -79,16 +79,22 @@ const login = async (req, res) => {
 
 // ลบ user ทิ้ง
 const deleteUser = async (req, res) => {
-    const user = await user.findByPk(req.params.id);
+    const user = await User.findByPk(req.params.id);
     if(!user) {
         return res.status(404).json({
-            message: "user not found"
+            message: "User not found"
+        });
+    }
+    
+    if(user.role?.toLowerCase() === 'admin') {
+        return res.status(403).json({
+            message: "Forbidden"
         });
     }
 
     await user.destroy();
     res.status(200).json({
-        message: "User deleted"
+        message: "User Deleted"
     });
 };
 
